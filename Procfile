@@ -1,0 +1,1 @@
+web: gunicorn ppmElaborato2.wsgi --log-file -
