@@ -1,0 +1,42 @@
+{% extends "prova.html" %}
+{% load static %}
+
+{% block title %}Blog{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static "blog/post.css"%}"/>
+<link rel="stylesheet" href="{% static "blog/index.css"%}"/>
+{% endblock%}
+{% block content %}
+
+<header id="main-navigation">
+    <h1><a href="">Blog Dina</a></h1>
+    <nav>
+        <a href ="{% url "posts-page" %}"> tutti i miei post </a>
+        <a href = "{% url "read-later" %}">post preferiti</a>
+        <a href = "#">Login</a>
+    </nav>
+
+</header>
+    <section id="welcome">
+        <header>
+            <img src ="" alt"immagine autore blog" />
+            <h2>Il blog di Lorenzo Dinardo </h2>
+        </header>
+        <p>frase di benvenuto nel mio blog</p>
+    </section>
+
+    <section id="latest-posts">
+        <h2>I miei ultimi post</h2>
+        <ul>
+            {% for post in posts %}
+            {% include "blog/includes/post.html" %}
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="about">
+        <h2>Qualcosa su di me</h2>
+        <p>descrizione di cosa mi piace e cosa non mi piace e di cosa parlerà il blog</p>
+
+    </section>
+{% endblock %}

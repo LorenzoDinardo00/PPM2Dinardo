@@ -1,0 +1,25 @@
+{% extends "prova.html" %}
+{% load static %}
+{% block title %}
+Tutti i miei post
+{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static "blog/post.css" %}"/>
+<link rel="stylesheet" href="{% static "blog/all-posts.css" %}"/>
+{% endblock %}
+{% block content %}
+<header id="main-navigation">
+    <h1><a href="{%url "starting-page"%}">Blog Dina</a></h1>
+    <nav>
+        <a href="{% url "posts-page" %}">tutti i miei post</a>
+    </nav>
+</header>
+<section id="all-posts">
+    <h2>La mia collezione</h2>
+    <ul>
+       {% for post in all_posts %}
+        {% include "blog/includes/post.html" %}
+       {%endfor%}
+    </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+
+{%extends "prova.html"%}
+{%load static%}
+{% block title %}
+My stored posts
+{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static "blog/stored-posts.css" %}">
+{%endblock%}
+{% block content %}
+<header id="main-navigation">
+    <h1><a href="{% url "starting-page"%}">Blog Dina</a></h1>
+    <nav>
+        <a href ="{% url "posts-page" %}"> tutti i miei post </a>
+        <a href = "{% url "read-later" %}">post preferiti</a>
+    </nav>
+</header>
+<section id="stored-posts">
+    {% if not has_posts %}
+        <p> non ci sono post nei preferiti</p>
+    {% endif %}
+<ul>
+    {% for post in posts%}
+    <li><a href="{% url "post-detail-page" post.slug %}">{{ post.title }}</a></li>
+    {% endfor %}
+</ul>
+</section>
+{% endblock %}
