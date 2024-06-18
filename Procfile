@@ -1,1 +1,1 @@
-web: gunicorn ppmElaborato2.wsgi
+web: gunicorn ppmElaborato2.wsgi:application --log-file -
