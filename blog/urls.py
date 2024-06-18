@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("",include("ppmElaborato2.urls")),
+    path('admin/', admin.site.urls, name="admin"),
     path("", views.StartingPageView.as_view(), name="starting-page"),
     path("posts", views.AllPostsView.as_view(), name="posts-page"),
     path("posts/<slug:slug>", views.SinglePostView.as_view(), name="post-detail-page"),
