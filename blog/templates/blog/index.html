@@ -11,10 +11,18 @@
 <header id="main-navigation">
     <h1><a href="">Blog Dina</a></h1>
     <nav>
-        <a href ="{% url "posts-page" %}"> tutti i miei post </a>
-        <a href = "{% url "read-later" %}">post preferiti</a>
-        <a href = "">Login</a>
+        <a href="{% url 'posts-page' %}">Tutti i miei post</a>
+        <a href="{% url 'read-later' %}">Post preferiti</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'create_post' %}">Crea Post</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Registrati</a>
+        {% endif %}
     </nav>
+    <p>DEBUG: {% if user.is_authenticated %} Utente autenticato {% else %} Utente non autenticato {% endif %}</p>
+
 
 </header>
     <section id="welcome">

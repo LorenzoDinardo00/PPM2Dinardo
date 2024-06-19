@@ -4,18 +4,24 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from django.views.generic import ListView, DetailView
-from .form import CommentForm
+from .form import CommentForm, UserRegisterForm, PostForm
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from .models import Author
+from django.shortcuts import redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import logout
+from django.contrib.auth import views as auth_views 
+from django.utils.text import slugify  # Assicurati che questa importazione sia presente
+from django.contrib.auth import login  # Aggiungi questa linea
 
 
 def get_date(post):
     return post['date']
 
-# Create your views here.
 class StartingPageView(ListView):
     template_name = "blog/index.html"
     model = Post
@@ -23,11 +29,18 @@ class StartingPageView(ListView):
     context_object_name = "posts"
 
     def get_queryset(self):
-        queryset= super().get_queryset()
+        queryset = super().get_queryset()
         data = queryset[:3]
         return data
-    
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user  # Passa l'oggetto utente al contesto
+        return context
+
+def custom_logout(request):
+    logout(request)
+    return redirect('login')
 
 class AllPostsView(ListView):
     template_name = "blog/all-posts.html"
@@ -113,3 +126,68 @@ class ReadLaterView(View):
 
         return HttpResponseRedirect("/")
  
+class CustomLoginView(auth_views.LoginView):
+    template_name = 'blog/login.html'
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if not hasattr(user, 'author'):
+            Author.objects.create(
+                user=user,
+                first_name=user.username,
+                last_name='',
+                email_address=user.email
+            )
+        return super().form_valid(form)
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Author.objects.create(
+                user=user,
+                first_name=user.username,
+                last_name='',
+                email_address=user.email
+            )
+            login(request, user)
+            return redirect('starting-page')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'register.html', {'form': form})
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            if not hasattr(request.user, 'author'):
+                author = Author.objects.create(
+                    user=request.user,
+                    first_name=request.user.username,
+                    last_name='',
+                    email_address=request.user.email
+                )
+            else:
+                author = request.user.author
+            post.author = author
+            if not post.slug:
+                post.slug = slugify(post.title)
+                # Verifica se lo slug è unico
+                unique_slug = post.slug
+                num = 1
+                while Post.objects.filter(slug=unique_slug).exists():
+                    unique_slug = f"{post.slug}-{num}"
+                    num += 1
+                post.slug = unique_slug
+            post.save()
+            return redirect('starting-page')
+    else:
+        form = PostForm()
+    return render(request, 'create_post.html', {'form': form})
+
+def custom_logout(request):
+    logout(request)
+    return redirect('starting-page')
