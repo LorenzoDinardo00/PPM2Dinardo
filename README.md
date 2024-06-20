@@ -3,7 +3,7 @@ Credenziali di Django Amministration (/admin)
 
 Le credenziali per accedere all'amministrazione di Django sono le seguenti:
 
-Username: lore
+Username: lore,
 Password: password
 
 
