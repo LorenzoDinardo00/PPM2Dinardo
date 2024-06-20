@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.CustomLoginView.as_view(), name='login'),
-    path('logout/', views.custom_logout, name='logout'),  # Usa la vista di logout personalizzata
+    path('logout/', views.custom_logout, name='logout'), 
     path('register/', views.register, name='register'),
     path('create-post/', views.create_post, name='create_post'),
     path('', views.StartingPageView.as_view(), name='starting-page'),
