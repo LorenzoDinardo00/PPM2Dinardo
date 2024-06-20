@@ -15,8 +15,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import logout
 from django.contrib.auth import views as auth_views 
-from django.utils.text import slugify  # Assicurati che questa importazione sia presente
-from django.contrib.auth import login  # Aggiungi questa linea
+from django.utils.text import slugify  
+from django.contrib.auth import login  
 
 
 def get_date(post):
