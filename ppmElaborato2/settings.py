@@ -143,7 +143,7 @@ STATICFILES_DIRS=[
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / "uploads"
-MEDIA_URL = "/files/"
+
 # Configurazione di Amazon S3 per i file media
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
